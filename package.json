@@ -1,0 +1,14 @@
+{
+  "name": "dbm-rest",
+  "version": "1.0.0",
+  "description": "Zero Installation JSON Memory Database for NodeJS.",
+  "main": "DbmRest.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "author": "Juan R. Gavilanes",
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^3.5.3"
+  }
+}
