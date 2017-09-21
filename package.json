@@ -1,6 +1,6 @@
 {
   "name": "dbm-rest",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Zero Installation JSON Memory Database for NodeJS.",
   "main": "DbmRest.js",
   "scripts": {
