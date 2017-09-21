@@ -7,11 +7,21 @@
 */
 
 /*
+
+
 TODOLIST
 --------
-empezar a documentar en el readme.md
-Filtros *algo*otra cosa*
-Probar localstorage.
+
+## empezar a documentar en el readme.md
+
+### How to use
+```
+let DbmRest = require("./components/DbmRest");
+var db = new DbmRest("data.json", 0.5, false);
+```
+
+## Filtros *algo*otra cosa*
+## Probar localstorage.
 
 */
 
@@ -674,7 +684,7 @@ class DbmRest {
 
 }
 
-module.exports = { DbmRest };
+module.exports = DbmRest;
 
 
 /* HELPERS */
