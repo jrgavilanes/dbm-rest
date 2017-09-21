@@ -1,5 +1,5 @@
 # dbm-rest
-Zero Installation JSON Memory Database for NodeJS.
+Zero Installation JSON Memory Database for NodeJS
 
 ## Installation
 ```
