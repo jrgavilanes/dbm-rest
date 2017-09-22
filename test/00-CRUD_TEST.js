@@ -1,7 +1,7 @@
 let assert = require("assert");
 let fs = require('fs');
 
-let {DbmRest} = require('../DbmRest');
+let DbmRest = require('../DbmRest');
 
 let db;
 
@@ -15,9 +15,9 @@ describe("DbmRest: C.R.U.D", function() {
 
         }
         
-        this.timeout(1000);
-
         db = new DbmRest("test.json");
+        
+        this.timeout(1000);
 
     });
 
@@ -105,6 +105,8 @@ describe("DbmRest: C.R.U.D", function() {
         
         let incidencia = {};
         
+        
+        
         //console.time("inserta 100.000");
         for (let i = 0; i<1000; i++) {
             
@@ -113,7 +115,13 @@ describe("DbmRest: C.R.U.D", function() {
             incidencia.descripcion = "descripcion" + i;
             incidencia.cerrada = false;
             
-            db.post("incidencias", incidencia);
+            if (db.post("incidencias", incidencia).id == 5) {
+                
+                db.post("incidencias/5/comentarios", {autor: "user1", comentario: "me ha gustado 5", rating: 5});
+                db.post("incidencias/5/comentarios", {autor: "user2", comentario: "me ha gustado 4", rating: 4});
+                db.post("incidencias/5/comentarios", {autor: "user3", comentario: "me ha gustado 3", rating: 3});
+                
+            };
             
         }
         
@@ -125,9 +133,9 @@ describe("DbmRest: C.R.U.D", function() {
 
     after(function(){
         
-        this.timeout(1000);
-        
         db.close();
+        
+        this.timeout(1000);
 
     });
 

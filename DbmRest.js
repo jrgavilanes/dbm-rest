@@ -1,5 +1,5 @@
 /*
-*   Project: DbmREST 
+*   Project: DbmREST
 *   Version: 0.0.1
 *   Description: Zero Installation Memory JSON Database for NodeJS.
 *   Author: Juan R. Gavilanes.
@@ -24,6 +24,8 @@ var db = new DbmRest("data.json", 0.5, false);
 ## Probar localstorage.
 
 */
+
+'use strict';
 
 let fs = require('fs');
 
@@ -93,7 +95,7 @@ class DbmRest {
                 let dbx = this;
 
                 let t0 = Date.now();
-                
+
                 fs.writeFile(this._file, JSON.stringify(this._data), function(err) {
 
                     if(err) {
@@ -103,12 +105,12 @@ class DbmRest {
                     }
 
                     if (!dbx._production) {
-                        
+
                         t0 = Date.now() - t0;
                         console.log(getDateTime() + " -> The file was saved in " + t0 + " ms.");
-                        
+
                     }
-                        
+
                     dbx._backup_at = getDateTime();
 
                 });
@@ -154,29 +156,29 @@ class DbmRest {
     find(path, query = "*", limit = 0) {
 
         if (typeof query == "object") {
-            
+
             query = this.cleanObject(query);
-            
+
         } else if (typeof query == "number") {
-            
+
             if (path[path.length-1] == "/") {
-                
+
                 path = path + query;
-                
+
             } else {
-                
+
                 path = path + "/" + query;
-                
+
             }
-            
+
             return this.get(path);
-            
+
         } else if (query == "*") {
-            
+
             return this.get(path);
-            
+
         }
-        
+
         path = this.sanitizePath(path);
 
         let result = [];
@@ -198,8 +200,8 @@ class DbmRest {
                                 coincidencias++;
 
                             } else {
-                                
-                                //falta implementar t*ni*9, *e*ni*    
+
+                                //falta implementar t*ni*9, *e*ni*
 
                                 if (query[k].startsWith("*") && query[k].endsWith("*")) {
 
@@ -274,9 +276,9 @@ class DbmRest {
                     } else {    //Búsqueda numérica.
 
                         if (typeof query[k] !== "string") {
-                            
+
                             if (e[k] === query[k])  coincidencias++;
-                            
+
                         } else {
 
                             if (query[k].startsWith(">=")) {
@@ -360,7 +362,7 @@ class DbmRest {
         if ( path.length === 1 ) {
 
             if (this._data[path[0]]) {
-                
+
                 delete this._data[path[0]];
 
                 return true;
@@ -403,7 +405,7 @@ class DbmRest {
             throw "Invalid number of parameters";
 
         }
-        
+
         row = clone(row);
 
         let now = getDateTime();
@@ -474,12 +476,12 @@ class DbmRest {
             throw "Invalid number of parameters";
 
         }
-        
+
         row = clone(row);
 
         let now = getDateTime();
         row.updated_at = now;
-        
+
         if ( path.length === 2 ) {
 
             if (this._data[path[0]] && this._data[path[0]][path[1]]) {
@@ -509,7 +511,7 @@ class DbmRest {
         throw "Unexpected error!";
 
     }
-    
+
     sanitizePath(path){
 
         path = path.trim();
@@ -584,13 +586,13 @@ class DbmRest {
 
             return false;
 
-        } 
+        }
 
         throw "Unexpected length! (max: 4)";
 
     }
 
-    get(path) {
+    get(path, ord = "asc") {
 
         path = this.sanitizePath(path);
 
@@ -602,7 +604,17 @@ class DbmRest {
 
                 if (this._data[path[0]]) {
 
-                    return this._data[path[0]].slice();
+                    if (ord === "asc") {
+                        
+                        return this._data[path[0]].slice();
+                        
+                    } else if (ord === "desc") {
+                        
+                        return this._data[path[0]].slice().reverse();
+                        
+                    }
+                    
+                    throw "wrong order parameter: " +  ord;
 
                 }
 
@@ -639,12 +651,23 @@ class DbmRest {
 
                 if (this._data[path[0]][path[1]][path[2]]) {
 
-                    return this._data[path[0]][path[1]][path[2]].slice();
+                    if (ord === "asc") {
+                        
+                        return this._data[path[0]][path[1]][path[2]].slice();
+                        
+                    } else if (ord === "desc") {
+                        
+                        return this._data[path[0]][path[1]][path[2]].slice().reverse();
+                        
+                    }
+                    
+                    throw "wrong order parameter: " +  ord;
+                    
 
                 }
 
                 return null;
-                
+
             } catch(e) {
 
                 return null;
@@ -675,7 +698,7 @@ class DbmRest {
         throw "Unexpected length! (max: 4)";
 
     }
-    
+
     get file() {
 
         return this._file;

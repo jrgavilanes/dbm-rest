@@ -1,6 +1,6 @@
 let assert = require("assert");
 
-let {DbmRest} = require('../DbmRest');
+let DbmRest = require('../DbmRest');
 
 let db;
 
@@ -8,15 +8,27 @@ describe("DbmRest: Queries", function() {
 
     before(function(){
 
-        this.timeout(1000);
-        
         db = new DbmRest("test.json");
+        
+        this.timeout(1000);
         
     });
 
     it ('Debería haber cargado la base de datos del disco en memoria', function() {
 
         assert.equal(db.get("incidencias").length, 1000, "BD del disco ya en memoria");
+
+    });
+    
+    it ('Debería devolver las incidencias en el orden inverso', function() {
+
+        assert.equal(db.get("incidencias", "desc")[0].id, 999, "primer registro es 999 ( desc ).");
+        
+        assert.equal(db.get("incidencias", "desc")[999].id, 0, "ultimo registro es 0 ( desc ).");
+        
+        assert.equal(db.get("incidencias/5/comentarios", "desc")[0].id, 2, "primer registro de subtabla es 2 ( desc ).");
+        
+        assert.equal(db.get("incidencias/5/comentarios")[0].id, 0, "primer registro de subtabla es 0 ( desc ).");
 
     });
     
