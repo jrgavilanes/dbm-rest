@@ -7,22 +7,16 @@
 */
 
 /*
-
-
 TODOLIST
 --------
-
 ## empezar a documentar en el readme.md
-
 ### How to use
 ```
 let DbmRest = require("./components/DbmRest");
 var db = new DbmRest("data.json", 0.5, false);
 ```
-
 ## Filtros *algo*otra cosa*
 ## Probar localstorage.
-
 */
 
 'use strict';
@@ -390,10 +384,8 @@ class DbmRest {
     }
 
     /*
-
     db.post("/noticias", noticia)
     db.post("/noticias/2/comentarios", comentario)
-
     */
 
     post(path, row) {
@@ -461,10 +453,8 @@ class DbmRest {
     }
 
     /*
-
     db.put("/noticias/2", noticia)
     db.put("/noticias/2/comentarios/3", comentario)
-
     */
 
     put(path, row) {
@@ -479,14 +469,23 @@ class DbmRest {
 
         row = clone(row);
 
-        let now = getDateTime();
-        row.updated_at = now;
+        row.updated_at = getDateTime();
+
+        let keys = Object.keys(row);
 
         if ( path.length === 2 ) {
 
             if (this._data[path[0]] && this._data[path[0]][path[1]]) {
 
-                this._data[path[0]][path[1]] = clone(row);
+                //this._data[path[0]][path[1]] = clone(row);
+
+                for (let key of keys) {
+
+                    this._data[path[0]][path[1]][key] = row[key];
+
+                }
+
+                this._updated_at = getDateTime();
 
                 return clone(this._data[path[0]][path[1]]);
 
@@ -498,7 +497,17 @@ class DbmRest {
 
             if (this._data[path[0]][path[1]][path[2]] && this._data[path[0]][path[1]][path[2]][path[3]]) {
 
-                this._data[path[0]][path[1]][path[2]][path[3]] = clone(row);
+                // this._data[path[0]][path[1]][path[2]][path[3]] = clone(row);
+
+                // return clone(this._data[path[0]][path[1]][path[2]][path[3]]);
+
+                for (let key of keys) {
+
+                    this._data[path[0]][path[1]][path[2]][path[3]][key] = row[key];
+
+                }
+
+                this._updated_at = getDateTime();
 
                 return clone(this._data[path[0]][path[1]][path[2]][path[3]]);
 
@@ -605,15 +614,19 @@ class DbmRest {
                 if (this._data[path[0]]) {
 
                     if (ord === "asc") {
+
+                        //return this._data[path[0]].slice();
+                        return this._data[path[0]].filter(function(e){return e !== null});
                         
-                        return this._data[path[0]].slice();
                         
+
                     } else if (ord === "desc") {
-                        
-                        return this._data[path[0]].slice().reverse();
-                        
+
+                        //return this._data[path[0]].slice().reverse();
+                        return this._data[path[0]].filter(function(e){return e !== null}).reverse();
+
                     }
-                    
+
                     throw "wrong order parameter: " +  ord;
 
                 }
@@ -652,17 +665,19 @@ class DbmRest {
                 if (this._data[path[0]][path[1]][path[2]]) {
 
                     if (ord === "asc") {
-                        
-                        return this._data[path[0]][path[1]][path[2]].slice();
-                        
+
+                        //return this._data[path[0]][path[1]][path[2]].slice();
+                        return this._data[path[0]][path[1]][path[2]].filter(function(e){return e !== null});
+
                     } else if (ord === "desc") {
-                        
-                        return this._data[path[0]][path[1]][path[2]].slice().reverse();
-                        
+
+                        //return this._data[path[0]][path[1]][path[2]].slice().reverse();
+                        return this._data[path[0]][path[1]][path[2]].filter(function(e){return e !== null}).reverse();
+
                     }
-                    
+
                     throw "wrong order parameter: " +  ord;
-                    
+
 
                 }
 

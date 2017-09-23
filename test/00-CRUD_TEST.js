@@ -59,7 +59,16 @@ describe("DbmRest: C.R.U.D", function() {
         a = db.get("noticias/0");
 
         assert.equal(a.descripcion, "Descripción modificada", "Registro actualizado");
-
+        
+        a = {};
+        
+        a.descripcion = "Descripción reModificada";
+        
+        db.put("noticias/0", a);
+        a = db.get("noticias/0");
+        
+        assert.equal(a.descripcion, "Descripción reModificada", "Registro actualizado por objeto parcial");
+        
         db.post("noticias/0/tags", {nombre: 'cine'});
         db.post("noticias/0/tags", {nombre: 'libros'});
         db.post("noticias/0/tags", {nombre: 'viajes'});
@@ -68,6 +77,10 @@ describe("DbmRest: C.R.U.D", function() {
         a.nombre = "Cine Modificado";
 
         assert.equal(db.put("noticias/0/tags/0", a).nombre, "Cine Modificado", "Sub-Registro actualizado");
+        
+        a = {};
+        a.nombre = "Cine reModificado"
+        assert.equal(db.put("noticias/0/tags/0", a).nombre, "Cine reModificado", "Sub-Registro actualizado por objecto parcial");
 
     });
 
